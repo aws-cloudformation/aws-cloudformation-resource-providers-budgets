@@ -1,0 +1,25 @@
+{
+    "artifact_type": "RESOURCE",
+    "typeName": "AWS::Budgets::BudgetsAction",
+    "language": "java",
+    "runtime": "java8",
+    "entrypoint": "software.amazon.budgets.budgetsaction.HandlerWrapper::handleRequest",
+    "testEntrypoint": "software.amazon.budgets.budgetsaction.HandlerWrapper::testEntrypoint",
+    "settings": {
+        "version": false,
+        "subparser_name": null,
+        "verbose": 0,
+        "force": false,
+        "type_name": null,
+        "artifact_type": null,
+        "namespace": [
+            "software",
+            "amazon",
+            "budgets",
+            "budgetsaction"
+        ],
+        "codegen_template_path": "default",
+        "protocolVersion": "2.0.0"
+    },
+    "executableEntrypoint": "software.amazon.budgets.budgetsaction.HandlerWrapperExecutable"
+}
