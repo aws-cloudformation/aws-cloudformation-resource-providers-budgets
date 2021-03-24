@@ -21,4 +21,3 @@ Resources:
       Handler: software.amazon.budgets.budgetsaction.HandlerWrapper::testEntrypoint
       Runtime: java8
       CodeUri: ./target/aws-budgets-budgetsaction-handler-1.0-SNAPSHOT.jar
-
