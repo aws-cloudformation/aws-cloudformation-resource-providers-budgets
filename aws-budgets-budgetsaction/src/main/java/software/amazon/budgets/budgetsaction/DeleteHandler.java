@@ -4,6 +4,7 @@ import software.amazon.awssdk.services.budgets.BudgetsClient;
 import software.amazon.awssdk.services.budgets.model.DeleteBudgetActionRequest;
 import software.amazon.awssdk.services.budgets.model.NotFoundException;
 import software.amazon.cloudformation.proxy.AmazonWebServicesClientProxy;
+import software.amazon.cloudformation.proxy.HandlerErrorCode;
 import software.amazon.cloudformation.proxy.Logger;
 import software.amazon.cloudformation.proxy.ProgressEvent;
 import software.amazon.cloudformation.proxy.OperationStatus;
@@ -21,10 +22,10 @@ public class DeleteHandler extends BudgetsBaseHandler<CallbackContext> {
 
     @Override
     public ProgressEvent<ResourceModel, CallbackContext> handleRequest(
-        final AmazonWebServicesClientProxy proxy,
-        final ResourceHandlerRequest<ResourceModel> request,
-        final CallbackContext callbackContext,
-        final Logger logger) {
+            final AmazonWebServicesClientProxy proxy,
+            final ResourceHandlerRequest<ResourceModel> request,
+            final CallbackContext callbackContext,
+            final Logger logger) {
 
         final ResourceModel model = request.getDesiredResourceState();
 
@@ -34,15 +35,14 @@ public class DeleteHandler extends BudgetsBaseHandler<CallbackContext> {
                     budgetsClient::deleteBudgetAction);
         } catch (NotFoundException ex) {
             return ProgressEvent.<ResourceModel, CallbackContext>builder()
-                    .resourceModel(model)
-                    .status(OperationStatus.SUCCESS)
+                    .status(OperationStatus.FAILED)
+                    .errorCode(HandlerErrorCode.NotFound)
                     .message(String.format("Action %s does not exist.", model.getActionId()))
                     .build();        }
 
         return ProgressEvent.<ResourceModel, CallbackContext>builder()
-            .resourceModel(model)
-            .status(OperationStatus.SUCCESS)
-            .build();
+                .status(OperationStatus.SUCCESS)
+                .build();
     }
 
     private DeleteBudgetActionRequest buildDeleteRequest(ResourceModel model,

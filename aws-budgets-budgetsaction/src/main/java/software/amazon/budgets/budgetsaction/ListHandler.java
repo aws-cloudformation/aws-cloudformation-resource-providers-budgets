@@ -25,10 +25,10 @@ public class ListHandler extends BudgetsBaseHandler<CallbackContext> {
 
     @Override
     public ProgressEvent<ResourceModel, CallbackContext> handleRequest(
-        final AmazonWebServicesClientProxy proxy,
-        final ResourceHandlerRequest<ResourceModel> request,
-        final CallbackContext callbackContext,
-        final Logger logger) {
+            final AmazonWebServicesClientProxy proxy,
+            final ResourceHandlerRequest<ResourceModel> request,
+            final CallbackContext callbackContext,
+            final Logger logger) {
 
         final List<ResourceModel> models = new ArrayList<>();
         String nextToken = null;
@@ -43,9 +43,9 @@ public class ListHandler extends BudgetsBaseHandler<CallbackContext> {
         }while (nextToken != null);
 
         return ProgressEvent.<ResourceModel, CallbackContext>builder()
-            .resourceModels(models)
-            .status(OperationStatus.SUCCESS)
-            .build();
+                .resourceModels(models)
+                .status(OperationStatus.SUCCESS)
+                .build();
     }
 
     private DescribeBudgetActionsForAccountRequest buildListRequest(ResourceHandlerRequest<ResourceModel> request,

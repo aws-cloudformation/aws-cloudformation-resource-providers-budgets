@@ -53,7 +53,7 @@ public class Utils {
     }
 
     public static ActionThreshold convertActionThresholdFromCfn(software.amazon.budgets.budgetsaction.ActionThreshold
-                                                                cfnActionThreshold) {
+                                                                        cfnActionThreshold) {
         return ActionThreshold.builder()
                 .actionThresholdType(cfnActionThreshold.getType())
                 .actionThresholdValue(cfnActionThreshold.getValue())

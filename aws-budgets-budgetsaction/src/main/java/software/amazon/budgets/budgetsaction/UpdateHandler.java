@@ -1,9 +1,11 @@
 package software.amazon.budgets.budgetsaction;
 
 import software.amazon.awssdk.services.budgets.BudgetsClient;
+import software.amazon.awssdk.services.budgets.model.NotFoundException;
 import software.amazon.awssdk.services.budgets.model.UpdateBudgetActionRequest;
 import software.amazon.awssdk.services.budgets.model.UpdateBudgetActionResponse;
 import software.amazon.cloudformation.proxy.AmazonWebServicesClientProxy;
+import software.amazon.cloudformation.proxy.HandlerErrorCode;
 import software.amazon.cloudformation.proxy.Logger;
 import software.amazon.cloudformation.proxy.ProgressEvent;
 import software.amazon.cloudformation.proxy.OperationStatus;
@@ -26,23 +28,33 @@ public class UpdateHandler extends BudgetsBaseHandler<CallbackContext> {
 
     @Override
     public ProgressEvent<ResourceModel, CallbackContext> handleRequest(
-        final AmazonWebServicesClientProxy proxy,
-        final ResourceHandlerRequest<ResourceModel> request,
-        final CallbackContext callbackContext,
-        final Logger logger) {
+            final AmazonWebServicesClientProxy proxy,
+            final ResourceHandlerRequest<ResourceModel> request,
+            final CallbackContext callbackContext,
+            final Logger logger) {
 
         final ResourceModel model = request.getDesiredResourceState();
 
-        UpdateBudgetActionResponse result = proxy.injectCredentialsAndInvokeV2(
-                buildUpdateRequest(model,request),
-                budgetsClient::updateBudgetAction);
+        UpdateBudgetActionResponse result;
+
+        try {
+            result = proxy.injectCredentialsAndInvokeV2(
+                    buildUpdateRequest(model,request),
+                    budgetsClient::updateBudgetAction);
+        } catch (NotFoundException ex) {
+            return ProgressEvent.<ResourceModel, CallbackContext>builder()
+                    .status(OperationStatus.FAILED)
+                    .errorCode(HandlerErrorCode.NotFound)
+                    .message(String.format("Action %s does not exist.", model.getActionId()))
+                    .build();
+        }
 
         final ResourceModel resultModel = convertActionFromSdk(result.newAction());
 
         return ProgressEvent.<ResourceModel, CallbackContext>builder()
-            .resourceModel(resultModel)
-            .status(OperationStatus.SUCCESS)
-            .build();
+                .resourceModel(resultModel)
+                .status(OperationStatus.SUCCESS)
+                .build();
     }
 
     private UpdateBudgetActionRequest buildUpdateRequest(ResourceModel model,
