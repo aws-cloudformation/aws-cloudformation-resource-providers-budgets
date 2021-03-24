@@ -7,4 +7,3 @@ Current supported resources in Budgets API:
 ## License
 
 This project is licensed under the Apache-2.0 License.
-
