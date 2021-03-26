@@ -1,6 +1,7 @@
 package software.amazon.budgets.budgetsaction;
 
 
+import com.google.common.collect.ImmutableList;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.budgets.BudgetsClient;
 import software.amazon.awssdk.services.budgets.model.Action;
@@ -25,6 +26,13 @@ public class TestUtils {
                         .groups(Arrays.asList("unitTestGroup"))
                         .roles(Arrays.asList("unitTestRole"))
                         .users(Arrays.asList("unitTestUser")).build())
+                .scpActionDefinition(ScpActionDefinition.builder()
+                        .policyId("testPolicyId")
+                        .targetIds(ImmutableList.of("123456789012")).build())
+                .ssmActionDefinition(SsmActionDefinition.builder()
+                        .instanceIds(ImmutableList.of("testInstance1"))
+                        .region("us-west-2")
+                        .subtype("STOP_EC2_INSTANCES").build())
                 .build();
         ResourceModel model = ResourceModel.builder()
                 .actionThreshold(actionThreshold)
@@ -39,6 +47,38 @@ public class TestUtils {
                                 .type("EMAIL")
                                 .address("unitTest@amazon.com")
                                 .build()))
+                .build();
+        return model;
+    }
+
+    public static ResourceModel generateNullActionModel() {
+        ActionThreshold actionThreshold = ActionThreshold.builder()
+                .value(100.0)
+                .type("PERCENTAGE")
+                .build();
+        Definition definition = Definition.builder()
+                .iamActionDefinition(IamActionDefinition.builder()
+                        .policyArn("arn:aws:iam::123456789012:policy/unitTestPolicy")
+                        .groups(Arrays.asList("unitTestGroup"))
+                        .roles(Arrays.asList("unitTestRole"))
+                        .users(Arrays.asList("unitTestUser")).build())
+                .scpActionDefinition(ScpActionDefinition.builder()
+                        .policyId("testPolicyId")
+                        .targetIds(ImmutableList.of("123456789012")).build())
+                .ssmActionDefinition(SsmActionDefinition.builder()
+                        .instanceIds(ImmutableList.of("testInstance1"))
+                        .region("us-west-2")
+                        .subtype("STOP_EC2_INSTANCES").build())
+                .build();
+        ResourceModel model = ResourceModel.builder()
+                .actionThreshold(null)
+                .approvalModel(null)
+                .actionType("APPLY_IAM_POLICY")
+                .budgetName(UNIT_TEST_BUDGET_NAME)
+                .definition(null)
+                .executionRoleArn(null)
+                .notificationType(null)
+                .subscribers(null)
                 .build();
         return model;
     }

@@ -24,7 +24,7 @@ import static software.amazon.budgets.budgetsaction.TestUtils.UNIT_TEST_ACCOUNT_
 import static software.amazon.budgets.budgetsaction.TestUtils.UNIT_TEST_ACTION_ID;
 
 @ExtendWith(MockitoExtension.class)
-public class CreateHandlerTest {
+public class  CreateHandlerTest {
 
     @Mock
     private AmazonWebServicesClientProxy proxy;
